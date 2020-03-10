@@ -6,10 +6,12 @@ const redisStore = require('connect-redis')(session);
 const client  = redis.createClient();
 const router = express.Router();
 const app = express();
-const gitlog = require('gitlog');
-
 const redis_port = 6379;
 const host = 'localhost';
+
+let login = require('./model/login_model.js');
+let register = require('./model/register_model.js'); 
+
 
 app.use(session({
     secret: 'secret',
@@ -21,44 +23,37 @@ app.use(session({
 app.use(bodyParser.json());      
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
-    const options =
-    { repo: '/home/mario/Desktop/nodejsProjects/conf_app' //Path is relative to the current folder
-    , number: 20
-    , author: 'Mario Ruci'
-    , fields:
-      [ 'hash'
-      , 'abbrevHash'
-      , 'subject'
-      , 'authorName'
-      , 'authorDate'
-      ]
-    , execOptions:
-      { maxBuffer: 1000 * 1024
-      }
-    };
-
-// Asynchronous (with Callback)
-gitlog(options, function(error, commits) {
-  // Commits is an array of commits in the repo
-  console.log(commits)
-});
 
 router.get('/',(req,res) => {
-    
-
-
-
     let sess = req.session;
     if(sess.email) {
         return res.redirect('/cms');
     }
     res.sendFile('index.html');
 });
-
+router.post('/register',(req,res) => {
+    register.register(req.body.email,req.body.password, function(err,data){
+        if(!err){
+            console.log('Registration Complete');
+            // Start session
+            res.end({'status':'ok','data':data});
+        }else{
+            console.log('Registration Error: ',err);
+            res.end({'status':'err','data':false});
+        }
+    });
+});
 router.post('/login',(req,res) => {
-    console.log(req.body);
-    req.session.email = req.body.email;
-    res.end('done');
+    login.login(req.body.email,req.body.password, function(err,data){
+        if(!err){
+            console.log('Login Success');
+            //Start session
+            res.end({'status':'ok','data':data});
+        }else{
+            console.log('Login Error: ',err);
+            res.end({'status':'err','data':false});
+        }
+    });
 });
 
 router.get('/cms',(req,res) => {

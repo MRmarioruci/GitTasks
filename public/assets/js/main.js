@@ -38,6 +38,21 @@ function indexViewModel() {
         })
     }
     self._register = function(){
+        /** Input Checks */
+        if( !self.newEmail() && !self.newPassword() && !self.newPasswordRepeat() ){
+            self.registerError('Please fill in the E-mail, Password, Password-Repeat fields in order to continue')
+        }else if(!self.newEmail()){
+            self.registerError('Please fill in the E-mail in order to continue');
+        }else if(!self.newPassword()){
+            self.registerError('Please fill in the Password in order to continue');
+        }else if(!self.newPasswordRepeat()){
+            self.registerError('Please fill in the Password-Retype in order to continue');
+        }else if(self.newPassword() != self.newPasswordRepeat()){
+            self.registerError('The passwords do not match');
+        }else{
+            self.registerError(null);
+        }
+
         register()
         .done(function(data){
             alert('loggedin');
@@ -53,10 +68,10 @@ function indexViewModel() {
     function register() {
         var d = $.Deferred();
         var o = {
-            'email':self.email(),
-            'newPassword':self.newPassword(),
+            'email':self.newEmail(),
+            'password':self.newPassword(),
         };
-        $.post( 'index.php/Eventpage/setCurrentEventPage', o)
+        $.post( '/register', o)
         .done(function( data ){
             if(data.status=='ok'){
                 d.resolve(data.data);
