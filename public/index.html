@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>MyDevWork</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://fonts.googleapis.com/css2?family=Bellota:wght@700&display=swap" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel='stylesheet' type='text/css' media='screen' href='assets/css/login.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='assets/css/main.css'>
+    <script src='main.js'></script>
+</head>
+<body id="__body__">
+    <div class="login-wrap" style="display: block;">
+        <center><h1 style="font-family:'Bellota';">MyDevWork</h1></center>
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Login</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Register</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="email" class="label">E-Mail</label>
+                        <input id="email" type="email" data-bind="textInput:email" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        <input id="pass" type="password"  data-bind="textInput:password"class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <p style="color:red;" data-bind="visible:loginError,text:loginError"></p>
+                        <button class="btn-blue" data-bind="click:_login">
+                            <i class="fas fa-spinner fa-spin" data-bind="visible:loginLoading()"></i> SUBMIT
+                        </button>
+                    </div>
+                    <div class="hr"></div>
+                </div>
+                <div class="sign-up-htm">
+                    <div class="group">
+                        <label for="email" class="label">E-Mail</label>
+                        <input id="email" type="email" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        <input id="pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Re-type Password</label>
+                        <input id="pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <input type="button" class="button signupbutton" value="Submit">
+                    </div>
+                    <div class="hr"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://kit.fontawesome.com/4d40715e6f.js" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+<script src="assets/js/main.js"></script>
+</html>
