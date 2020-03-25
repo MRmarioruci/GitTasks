@@ -28,7 +28,7 @@ function indexViewModel() {
 		self.loginLoading(true);
 		login()
 		.done(function(data){
-			window.location.href = "/cms";
+			window.location.href = "/cms/#Dashboard";
 		})
 		.fail(function(data){
 			
@@ -108,7 +108,5 @@ function indexViewModel() {
 		return d;
 	}
 }
-$(function() {
-	if(document.getElementById('__body__'))ko.applyBindings( new indexViewModel(), document.getElementById('__body__') );
-	else if(console && console.log ) console.log('non existant page');
-});
+if(document.getElementById('__body__'))ko.applyBindings( new indexViewModel(), document.getElementById('__body__') );
+else if(console && console.log ) console.log('non existant page');

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 const mysql      = require('mysql');
+const path = require('path');
 
 const client  = redis.createClient();
 const router = express.Router();
@@ -14,10 +15,11 @@ const host = 'localhost';
 let login = require('./model/login_model.js');
 let register = require('./model/register_model.js'); 
 let logger = require('./lib/log.js');
+let controlRepositories = require('./controller/controlRepositories.js'); 
 
 var connection = mysql.createConnection({
     host     : 'localhost',
-    user     : 'root',
+    user     : '',
     password : '',
     database : 'gitTasks'
 });
@@ -32,8 +34,29 @@ app.use(session({
 
 app.use(bodyParser.json());      
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname + '/public'));
 
+router.get('/',function(req,res){
+    let sess = req.session;
+    if(sess.email) {
+        return res.redirect('/cms');
+    }
+    res.sendFile('public/index.html', {root: __dirname })
+});
+router.get('/cms/:path*',function(req,res,next){
+    if(!req.session.email) {
+        res.redirect('/not_logged.html');
+    }else{
+        next()
+    }
+});
+router.get('/logout',(req,res) => {
+    req.session.destroy((err) => {
+        if(err) {
+            return console.log(err);
+        }
+        res.redirect('/');
+    });  
+});
 router.post('/register',(req,res) => {
     if(req.session.email) return res.json({'status':'err','data':'Alredy logged in'});
 
@@ -48,7 +71,7 @@ router.post('/register',(req,res) => {
         }
     });
 });
-router.post('/login',(req,res) => {
+router.all('/login',(req,res) => {
     if(req.session.email) return res.json({'status':'err','data':'Alredy logged in'});
 
     login.login(req.body.email,req.body.password, connection, function(err,data){
@@ -63,36 +86,9 @@ router.post('/login',(req,res) => {
     });
 });
 
-router.get('/',(req,res) => {
-    let sess = req.session;
-    if(sess.email) {
-        return res.redirect('/cms');
-    }
-    res.sendFile('index.html');
-});
-
-router.get('/cms',(req,res) => {
-    if(req.session.email) {
-        res.write(`<h1>Hello ${req.session.email} </h1><br>`);
-        res.end('<a href='+'/logout'+'>Logout</a>');
-    }
-    else {
-        res.sendFile('public/not_logged.html', {root: __dirname })
-    }
-});
-
-router.get('/logout',(req,res) => {
-    req.session.destroy((err) => {
-        if(err) {
-            return console.log(err);
-        }
-        res.redirect('/');
-    });  
-});
-
-
 app.use('/', router);
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 3000,() => {
     logger.log('info', `App Started on PORT ${process.env.PORT || 3000}`);
+    controlRepositories.run(router,connection);
 });
