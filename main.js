@@ -19,8 +19,8 @@ let controlRepositories = require('./controller/controlRepositories.js');
 
 var connection = mysql.createConnection({
     host     : 'localhost',
-    user     : '',
-    password : '',
+    user     : 'mario',
+    password : 'smilemalaka',
     database : 'gitTasks'
 });
 connection.connect();
