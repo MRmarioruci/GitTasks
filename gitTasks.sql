@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
--- Φιλοξενητής: 127.0.0.1
--- Χρόνος δημιουργίας: 25 Μαρ 2020 στις 09:23:35
--- Έκδοση διακομιστή: 10.4.11-MariaDB
--- Έκδοση PHP: 7.4.3
+-- Φιλοξενητής: localhost:3306
+-- Χρόνος δημιουργίας: 28 Μαρ 2020 στις 17:42:59
+-- Έκδοση διακομιστή: 5.7.29-0ubuntu0.18.04.1
+-- Έκδοση PHP: 7.2.24-0ubuntu0.18.04.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -21,6 +19,31 @@ SET time_zone = "+00:00";
 --
 -- Βάση δεδομένων: `gitTasks`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `Repositories`
+--
+
+CREATE TABLE `Repositories` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8mb4 NOT NULL,
+  `path` varchar(250) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `color` varchar(22) CHARACTER SET utf8mb4 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `Repositories`
+--
+
+INSERT INTO `Repositories` (`id`, `name`, `path`, `user_id`, `color`) VALUES
+(14, 'qwdqwdqwd', 'qwdqwdqwd', 5, '#E94149'),
+(15, 'wefwefwe', 'wefwef', 5, '#9b59b6'),
+(16, '3r32r23r23r', '23r23r23r23r', 5, '#f1c40f'),
+(17, 'wefwewefwef', 'wefwewef', 5, '#f39c12'),
+(18, 'wfwefwef', 'wefwefwef', 5, '#2c3e50');
 
 -- --------------------------------------------------------
 
@@ -48,6 +71,13 @@ INSERT INTO `Users` (`id`, `email`, `password`) VALUES
 --
 
 --
+-- Ευρετήρια για πίνακα `Repositories`
+--
+ALTER TABLE `Repositories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Ευρετήρια για πίνακα `Users`
 --
 ALTER TABLE `Users`
@@ -58,12 +88,15 @@ ALTER TABLE `Users`
 --
 
 --
+-- AUTO_INCREMENT για πίνακα `Repositories`
+--
+ALTER TABLE `Repositories`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
 -- AUTO_INCREMENT για πίνακα `Users`
 --
 ALTER TABLE `Users`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-COMMIT;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
