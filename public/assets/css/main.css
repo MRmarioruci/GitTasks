@@ -2158,20 +2158,11 @@ table.dataTable thead .sorting_asc,table.dataTable thead .sorting_desc {
 .page-header .navbar-nav>li.user-dropdown>a {
 	margin-right: 0
 }
-
-.open:not(.active-page)>a {
-	color: #2b2b2b;
-	font-weight: 500
+.active-page{
+	color:#7088A1 !important;
+	font-weight: bold;
+	background:rgba(126, 126, 126, 0.09);
 }
-
-.active-page.open>a {
-	font-weight: 500
-}
-
-.active-page.open>a i {
-	color: #2b2b2b
-}
-
 .navbar-default .navbar-nav>.open>a,.navbar-default .navbar-nav>.open>a:focus,.navbar-default .navbar-nav>.open>a:hover {
 	color: #1f2229;
 	background-color: transparent
@@ -2741,24 +2732,24 @@ body:not(.page-sidebar-fixed) .page-sidebar .slimScrollDiv {
 	position: relative
 }
 
-.page-sidebar-menu ul li.active-page>a i,.page-sidebar-menu ul li.active-page>a i.accordion-icon {
+.page-sidebar-menu ul li.active-page>div i,.page-sidebar-menu ul li.active-page>div i.accordion-icon {
 	color: #7850fc
 }
 
-.page-sidebar-menu ul li.active-page>a {
+.page-sidebar-menu ul li.active-page>div {
 	color: #7850fc;
 	background:#F1F1F1;
 	position: relative
 }
-.page-sidebar-menu ul li.active-page>a>label {
+.page-sidebar-menu ul li.active-page>div>label {
 	font-weight: 600;
 }
 
-.page-sidebar-menu ul li a:link {
+.page-sidebar-menu ul li div:link {
 	text-decoration: none
 }
 
-.page-sidebar-menu>ul>li>a:hover {
+.page-sidebar-menu>ul>li>div:hover {
 	opacity: .8
 }
 
@@ -2781,7 +2772,7 @@ body:not(.page-sidebar-fixed) .page-sidebar .slimScrollDiv {
 	vertical-align: middle
 }
 
-.page-sidebar-menu ul li.menu-divider {
+.page-sidebar-menu .menu-divider {
 	display: block;
 	width: 100%;
 	height: 1px;
@@ -3214,3 +3205,18 @@ body:not(.page-sidebar-fixed) .page-sidebar .slimScrollDiv {
 }
 .inline-block{display: inline-block;}
 .form__control-lg{height:40px;}
+
+.page__header-left{
+	display: inline-block;width: 50%;padding: 10px;float: left;
+}
+.page__header-right{
+	display: inline-block;width: 50%;float: left;text-align:right;
+}
+.pointer{
+	cursor:pointer !important;
+}
+.page__header-path{
+	position: absolute;
+    margin-left: 10px;
+    margin-top: 5px;
+}

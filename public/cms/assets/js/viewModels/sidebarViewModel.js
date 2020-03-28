@@ -1,10 +1,14 @@
 define(['knockout', 'jquery','modal','charCount'], function (ko, $) {
-	return function sidebarViewModel() {
+	return new function sidebarViewModel() {
 		var self = this;
 		self.currentPage = ko.observable('Dashboard');
 		self.user_name = ko.observable('');
 		self.addRepositoryModal = ko.observable(null);
+		self.deleteRepositoryModal = ko.observable(null);
+
+		self.repositories = ko.observableArray([]);
 		self.addRepo = function(){
+			console.log('adding repo...');
 			self.addRepositoryModal(self);
 		}
 		self.adding = ko.observable(false);
@@ -19,11 +23,59 @@ define(['knockout', 'jquery','modal','charCount'], function (ko, $) {
 			self.adding(true);
 			_addRepo()
 			.done(function(data){
-				self.update(data);
+				self.addRepositoryModal(null);
+				self.getData();
 			})
 		}
-		self.setCurrentPage = function(page){
-			self.currentPage(page);
+		self.getData = function(){
+			_getRepositories()
+			.done(function(data){
+				var tmp = $.map(data,function(repo){
+					return new Repository(repo);
+				})
+				self.repositories(tmp);
+				console.log(self.repositories());
+			})
+		}
+		self.setCurrent = function(id){
+			var repos = self.repositories();
+			ko.utils.arrayFilter(repos,function(repo){
+				if(repo.isCurrent()) repo.isCurrent(false);
+				if(id == repo.id) repo.isCurrent(true);
+			})
+		}
+		self.currentRepo = ko.computed(function(){
+			var repos = self.repositories();
+			var tmp = null;
+			ko.utils.arrayFilter(repos,function(repo){
+				if(repo.isCurrent()){
+					tmp = repo;
+				}
+			})
+			return tmp;
+		})
+		function Repository(data){
+			var repo = this;
+			repo.id = data.id;
+			repo.name = ko.observable(data.name);
+			repo.path = ko.observable(data.path);
+			repo.color = ko.observable(data.color);
+			repo.isCurrent = ko.observable(false);
+			repo.showOptions = ko.observable(false);
+			repo.toggleOptions = function(){
+				repo.showOptions(!repo.showOptions());
+			}
+			repo.deleting = ko.observable(false);
+			repo._delete = function(){
+				self.deleteRepositoryModal(repo);
+			}
+			repo.deleteMe = function(){
+				_deleteRepo(repo.id)
+				.done(function(data){
+					self.repositories.remove(repo);
+					self.deleteRepositoryModal(null);
+				})
+			}
 		}
 		function _addRepo(){
 			var d = $.Deferred();
@@ -34,7 +86,7 @@ define(['knockout', 'jquery','modal','charCount'], function (ko, $) {
 			})
 			.done(function (data) {
 				if (data) {
-					if (data.status == 'ok') {
+					if (data.code == 1) {
 						d.resolve(data.data ? data.data : []);
 					} else {
 						d.reject();
@@ -43,5 +95,36 @@ define(['knockout', 'jquery','modal','charCount'], function (ko, $) {
 			})
 			return d;
 		}
+		function _getRepositories(){
+			var d = $.Deferred();
+			$.post('/getRepositories', {})
+			.done(function (data) {
+				if (data) {
+					if (data.code == 1) {
+						d.resolve(data.data ? data.data : []);
+					} else {
+						d.reject();
+					}
+				}
+			})
+			return d;
+		}
+		function _deleteRepo(id){
+			var d = $.Deferred();
+			$.post('/deleteRepo', {
+				'id': id,
+			})
+			.done(function (data) {
+				if (data) {
+					if (data.code == 1) {
+						d.resolve(data.data ? data.data : []);
+					} else {
+						d.reject();
+					}
+				}
+			})
+			return d;
+		}
+		self.getData();
 	};
 });

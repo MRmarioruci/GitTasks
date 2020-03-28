@@ -19,15 +19,15 @@ let controlRepositories = require('./controller/controlRepositories.js');
 
 var connection = mysql.createConnection({
     host     : 'localhost',
-    user     : 'mario',
-    password : 'smilemalaka',
+    user     : '',
+    password : '',
     database : 'gitTasks'
 });
 connection.connect();
 
 app.use(session({
     secret: 'secret',
-    store: new redisStore({ host: host, port: redis_port, client: client,ttl : 260}),
+    store: new redisStore({ host: host, port: redis_port, client: client}),
     saveUninitialized: false,
     resave: false
 }));
@@ -44,7 +44,7 @@ router.get('/',function(req,res){
 });
 router.get('/cms/:path*',function(req,res,next){
     if(!req.session.email) {
-        res.redirect('/not_logged.html');
+        res.sendFile('public/cms/not_logged.html', {root: __dirname })
     }else{
         next()
     }
@@ -90,5 +90,5 @@ app.use('/', router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 3000,() => {
     logger.log('info', `App Started on PORT ${process.env.PORT || 3000}`);
-    controlRepositories.run(router,connection);
+    controlRepositories.run(router,connection,logger);
 });
