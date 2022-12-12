@@ -18,7 +18,7 @@
     "colors": "^1.4.0",
     "connect-redis": "^4.0.4",
     "ddos-express": "^0.1.7",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "gitlog": "^3.2.0",
     "mysql": "^2.18.1",
